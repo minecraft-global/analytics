@@ -2,6 +2,9 @@ package global.minecraft.MinecraftGlobalAnalytics;
 
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.io.FileUtils;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.bukkit.Server;
 import org.bukkit.World;
 
@@ -10,17 +13,21 @@ import java.time.Instant;
 import java.time.temporal.ChronoField;
 
 public class StatsPoster implements Runnable {
-    Server server;
+    private final Server server;
 
-    EventsListener eventsListener;
-    TPSMeasurer tpsMeasurer;
+    private final String authorization;
 
-    int lastHour;
+    private final EventsListener eventsListener;
+    private final TPSMeasurer tpsMeasurer;
 
-    public StatsPoster(Server s, EventsListener eL, TPSMeasurer tP) {
+    private int lastHour;
+
+    public StatsPoster(Server s, String a, EventsListener eL, TPSMeasurer tP) {
         super();
 
         server = s;
+
+        authorization = a;
 
         eventsListener = eL;
         tpsMeasurer = tP;
@@ -30,8 +37,11 @@ public class StatsPoster implements Runnable {
 
     @Override
     public void run() {
-        if (Instant.now().get(ChronoField.CLOCK_HOUR_OF_DAY) != lastHour) {
+        int currentHour = Instant.now().get(ChronoField.CLOCK_HOUR_OF_DAY);
+
+        if (currentHour != lastHour) {
             postStats();
+            lastHour = currentHour;
         }
     }
 
@@ -58,5 +68,12 @@ public class StatsPoster implements Runnable {
 
     private void postStats() {
         String data = fetchStats().toJsonString();
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        try {
+            HttpPost request = new HttpPost("https://v2api.minecraft.global/server/{server_id}/stats");
+            request.addHeader("Authorization", authorization);
+        }
     }
 }

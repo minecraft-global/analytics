@@ -14,7 +14,7 @@ public final class MinecraftGlobalAnalytics extends JavaPlugin {
         BukkitScheduler scheduler = server.getScheduler();
         EventsListener eventsListener = new EventsListener();
         TPSMeasurer tpsMeasurer = new TPSMeasurer();
-        StatsPoster statsPoster = new StatsPoster(server, eventsListener, tpsMeasurer);
+        StatsPoster statsPoster = new StatsPoster(server, this.getConfig().getString("serverToken"), eventsListener, tpsMeasurer);
 
         server.getPluginManager().registerEvents(eventsListener, this);
 

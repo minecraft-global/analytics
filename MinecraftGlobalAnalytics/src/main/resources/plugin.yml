@@ -1,4 +1,4 @@
-name: MCLink
+name: MinecraftGlobalAnalytics
 version: '${project.version}'
 main: global.minecraft.MinecraftGlobalAnalytics
 authors: [ Iapetus11, trustedmercury ]

@@ -1,0 +1,5 @@
+name: MCLink
+version: '${project.version}'
+main: global.minecraft.MinecraftGlobalAnalytics
+authors: [ Iapetus11, trustedmercury ]
+description: The official plugin for statistics on https://minecraft.global

@@ -1,6 +1,5 @@
 package global.minecraft.MinecraftGlobalAnalytics;
 
-import com.sun.org.glassfish.external.statistics.Stats;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;

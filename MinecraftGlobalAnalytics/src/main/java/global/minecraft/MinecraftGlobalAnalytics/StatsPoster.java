@@ -23,7 +23,7 @@ public class StatsPoster implements Runnable {
     private final EventsListener eventsListener;
     private final TPSMeasurer tpsMeasurer;
 
-    private int lastHour;
+    private long lastSeconds;
 
     public StatsPoster(Server s, String a, EventsListener eL, TPSMeasurer tP) {
         super();
@@ -35,16 +35,16 @@ public class StatsPoster implements Runnable {
         eventsListener = eL;
         tpsMeasurer = tP;
 
-        lastHour = Instant.now().get(ChronoField.CLOCK_HOUR_OF_DAY);
+        lastSeconds = Instant.now().getEpochSecond();
     }
 
     @Override
     public void run() {
-        int currentHour = Instant.now().get(ChronoField.CLOCK_HOUR_OF_DAY);
+        long currentSeconds = Instant.now().getEpochSecond();
 
-        if (currentHour != lastHour) {
+        if (lastSeconds + 3600 >= currentSeconds) {
             postStats();
-            lastHour = currentHour;
+            lastSeconds = currentSeconds;
         }
     }
 

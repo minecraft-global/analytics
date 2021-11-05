@@ -4,7 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-public final class MinecraftGlobalAnalytics extends JavaPlugin {
+public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         this.saveDefaultConfig();

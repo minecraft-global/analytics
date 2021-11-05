@@ -1,5 +1,5 @@
 name: MinecraftGlobalAnalytics
 version: '${project.version}'
-main: global.minecraft.MinecraftGlobalAnalytics
+main: global.minecraft.MinecraftGlobalAnalytics.Main
 authors: [ Iapetus11, trustedmercury ]
 description: The official plugin for statistics on https://minecraft.global

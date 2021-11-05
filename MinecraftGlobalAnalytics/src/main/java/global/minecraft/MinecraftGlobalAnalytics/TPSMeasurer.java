@@ -1,17 +1,12 @@
 package global.minecraft.MinecraftGlobalAnalytics;
 
 public class TPSMeasurer implements Runnable {
-    private double startedAt;
+    private double startedAt = -1;
     private int ticks;
-
-    public TPSMeasurer() {
-        super();
-
-        startedAt = System.currentTimeMillis() / 1000.0;
-    }
 
     @Override
     public void run() {
+        if (startedAt == -1) startedAt = System.currentTimeMillis() / 1000.0;
         ticks += 1;
     }
 

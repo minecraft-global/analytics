@@ -7,13 +7,15 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.bukkit.Server;
 import org.bukkit.World;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.time.Instant;
-import java.time.temporal.ChronoField;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class StatsPoster implements Runnable {
     private final Server server;
@@ -23,7 +25,7 @@ public class StatsPoster implements Runnable {
     private final EventsListener eventsListener;
     private final TPSMeasurer tpsMeasurer;
 
-    private long lastSeconds;
+    private int lastHour = -1;
 
     public StatsPoster(Server s, String a, EventsListener eL, TPSMeasurer tP) {
         super();
@@ -34,17 +36,15 @@ public class StatsPoster implements Runnable {
 
         eventsListener = eL;
         tpsMeasurer = tP;
-
-        lastSeconds = Instant.now().getEpochSecond();
     }
 
     @Override
     public void run() {
-        long currentSeconds = Instant.now().getEpochSecond();
+        int hourNow = LocalTime.now().getHour();
 
-        if (lastSeconds + 3600 >= currentSeconds) {
+        if (hourNow != lastHour) {
             postStats();
-            lastSeconds = currentSeconds;
+            lastHour = hourNow;
         }
     }
 
@@ -84,7 +84,12 @@ public class StatsPoster implements Runnable {
         }
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(request)) {
-            assert response.getStatusLine().getStatusCode() == 200;
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            if (statusCode != 200) {
+                String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
+                throw new Exception(String.format("Response status code was not 200 OK (Was %d): %s", statusCode, responseBody));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

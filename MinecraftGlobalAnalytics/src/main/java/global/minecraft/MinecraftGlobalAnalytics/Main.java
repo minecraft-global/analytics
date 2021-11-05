@@ -17,8 +17,9 @@ public final class Main extends JavaPlugin {
 
         server.getPluginManager().registerEvents(eventsListener, this);
 
-        scheduler.scheduleSyncRepeatingTask(this, tpsMeasurer, 0, 1);
-        scheduler.scheduleSyncRepeatingTask(this, statsPoster, 0, 20*60);
+        // we wait two minutes before starting these tasks
+        scheduler.scheduleSyncRepeatingTask(this, tpsMeasurer, 2*20*60, 1);
+        scheduler.scheduleSyncRepeatingTask(this, statsPoster, 2*20*60, 100);
     }
 
     @Override

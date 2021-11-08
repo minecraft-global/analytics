@@ -3,6 +3,7 @@ package global.minecraft.MinecraftGlobalAnalytics;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -12,13 +13,14 @@ public final class Main extends JavaPlugin {
         saveDefaultConfig();
 
         Server server = getServer();
+        PluginManager pluginManager = server.getPluginManager();
 
         FileConfiguration config = getConfig();
         String authorization = config.getString("serverToken");
 
         if (authorization.equals(config.getDefaults().getString("serverToken"))) {
             server.getConsoleSender().sendMessage(ChatColor.RED + "Please set the server token in plugins/MinecraftGlobalAnalytics/config.yml.");
-            server.shutdown();
+            pluginManager.disablePlugin(this);
             return;
         }
 

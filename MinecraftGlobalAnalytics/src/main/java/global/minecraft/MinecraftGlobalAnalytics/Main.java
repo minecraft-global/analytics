@@ -28,7 +28,7 @@ public final class Main extends JavaPlugin {
         EventsListener eventsListener = new EventsListener();
         TPSMeasurer tpsMeasurer = new TPSMeasurer();
         StatsFetcher statsFetcher = new StatsFetcher(server, eventsListener, tpsMeasurer);
-        StatsPoster statsPoster = new StatsPoster(statsFetcher, authorization);
+        StatsPoster statsPoster = new StatsPoster(server, statsFetcher, authorization);
 
         server.getPluginManager().registerEvents(eventsListener, this);
 

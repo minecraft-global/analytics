@@ -6,21 +6,28 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.Server;
+import org.bukkit.command.ConsoleCommandSender;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalTime;
 
 public class StatsPoster implements Runnable {
+    private final Server server;
+
     private final String authorization;
     private final StatsFetcher statsFetcher;
 
     private int lastHour;
 
-    public StatsPoster(StatsFetcher s, String a) {
+    public StatsPoster(Server s, StatsFetcher sF, String a) {
         super();
 
+        server = s;
+
         authorization = a;
-        statsFetcher = s;
+        statsFetcher = sF;
 
         lastHour = LocalTime.now().getHour();
     }
@@ -53,9 +60,17 @@ public class StatsPoster implements Runnable {
         try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(request)) {
             int statusCode = response.getStatusLine().getStatusCode();
 
-            if (statusCode != 200) {
-                String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
-                throw new Exception(String.format("Response status code was not 200 OK (Was %d): %s", statusCode, responseBody));
+            ConsoleCommandSender consoleSender = server.getConsoleSender();
+
+            switch (statusCode) {
+                case 200: break;
+                case 401:
+                    consoleSender.sendMessage(ChatColor.RED + "Failed to post analytics to minecraft.global: Invalid server token specified in config.");
+                case 403:
+                    consoleSender.sendMessage(ChatColor.RED + "Failed to post analytics to minecraft.global: This server does not have premium.");
+                default:
+                    String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
+                    throw new Exception(String.format("Response status code was not 200 OK (Was %d): %s", statusCode, responseBody));
             }
         } catch (Exception e) {
             e.printStackTrace();

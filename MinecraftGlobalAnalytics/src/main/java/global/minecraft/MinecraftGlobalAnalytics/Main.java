@@ -7,13 +7,13 @@ import org.bukkit.scheduler.BukkitScheduler;
 public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
-        this.saveDefaultConfig();
+        saveDefaultConfig();
 
         Server server = getServer();
         BukkitScheduler scheduler = server.getScheduler();
         EventsListener eventsListener = new EventsListener();
         TPSMeasurer tpsMeasurer = new TPSMeasurer();
-        StatsPoster statsPoster = new StatsPoster(server, this.getConfig().getString("serverToken"), eventsListener, tpsMeasurer);
+        StatsPoster statsPoster = new StatsPoster(new StatsFetcher(server, eventsListener, tpsMeasurer), getConfig().getString("serverToken"));
 
         server.getPluginManager().registerEvents(eventsListener, this);
 

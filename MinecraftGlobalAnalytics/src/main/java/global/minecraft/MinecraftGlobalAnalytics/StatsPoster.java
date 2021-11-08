@@ -13,29 +13,21 @@ import org.bukkit.World;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class StatsPoster implements Runnable {
-    private final Server server;
-
     private final String authorization;
+    private final StatsFetcher statsFetcher;
 
-    private final EventsListener eventsListener;
-    private final TPSMeasurer tpsMeasurer;
+    private int lastHour;
 
-    private int lastHour = -1;
-
-    public StatsPoster(Server s, String a, EventsListener eL, TPSMeasurer tP) {
+    public StatsPoster(StatsFetcher s, String a) {
         super();
 
-        server = s;
-
         authorization = a;
+        statsFetcher = s;
 
-        eventsListener = eL;
-        tpsMeasurer = tP;
+        lastHour = LocalTime.now().getHour();
     }
 
     @Override
@@ -43,34 +35,14 @@ public class StatsPoster implements Runnable {
         int hourNow = LocalTime.now().getHour();
 
         if (hourNow != lastHour) {
+            System.out.printf("Posting stats (hour: %d - %d)%n", hourNow, lastHour);
             postStats();
             lastHour = hourNow;
         }
     }
 
-    private StatsRecord fetchStats() {
-        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-        float systemCpuLoad = (float) osBean.getSystemCpuLoad();
-
-        long memoryUsageBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-        float averageTPS = tpsMeasurer.getAverageTPS();
-        long messagesSince = eventsListener.getMessagesSince();
-
-        tpsMeasurer.reset();
-        eventsListener.resetStatCounters();
-
-        long worldsStorageUsageBytes = 0;
-
-        for (World world : server.getWorlds()) {
-            worldsStorageUsageBytes += FileUtils.sizeOfDirectory(world.getWorldFolder());
-        }
-
-        return new StatsRecord(systemCpuLoad, memoryUsageBytes, averageTPS, worldsStorageUsageBytes, messagesSince);
-    }
-
     private void postStats() {
-        String data = fetchStats().toJsonString();
+        String data = statsFetcher.fetchStats().toJsonString();
         HttpPost request = new HttpPost("https://v2api.minecraft.global/serverstats");
 
         request.addHeader("Authorization", authorization);

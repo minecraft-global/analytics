@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class StatsRecord {
     @SerializedName("cpu_percent")
-    private float cpuPercent;
+    private final float cpuPercent;
     @SerializedName("mem_usage_bytes")
-    private long memUsageBytes;
+    private final long memUsageBytes;
     @SerializedName("ticks_per_second")
-    private float ticksPerSecond;
+    private final float ticksPerSecond;
     @SerializedName("world_size_bytes")
-    private long worldSizeBytes;
+    private final long worldSizeBytes;
     @SerializedName("chat_messages")
-    private long chatMessages;
+    private final long chatMessages;
 
     public StatsRecord(float cP, long mU, float tP, long wS, long cM) {
         cpuPercent = cP;

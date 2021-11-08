@@ -1,18 +1,13 @@
 package global.minecraft.MinecraftGlobalAnalytics;
 
-import com.sun.management.OperatingSystemMXBean;
-import org.apache.commons.io.FileUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.bukkit.Server;
-import org.bukkit.World;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.management.ManagementFactory;
 import java.time.LocalTime;
 
 public class StatsPoster implements Runnable {

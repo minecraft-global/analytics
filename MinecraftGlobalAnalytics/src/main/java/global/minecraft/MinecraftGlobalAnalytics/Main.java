@@ -30,7 +30,7 @@ public final class Main extends JavaPlugin {
         StatsFetcher statsFetcher = new StatsFetcher(server, eventsListener, tpsMeasurer);
         StatsPoster statsPoster = new StatsPoster(server, statsFetcher, authorization);
 
-        server.getPluginManager().registerEvents(eventsListener, this);
+        pluginManager.registerEvents(eventsListener, this);
 
         // we wait two minutes before starting these tasks
         scheduler.scheduleSyncRepeatingTask(this, tpsMeasurer, 2*20*60, 1);

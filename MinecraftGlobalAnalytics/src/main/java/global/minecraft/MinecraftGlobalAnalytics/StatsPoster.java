@@ -16,8 +16,8 @@ import java.time.LocalTime;
 public class StatsPoster implements Runnable {
     private final Server server;
 
-    private final String authorization;
     private final StatsFetcher statsFetcher;
+    private final String authorization;
 
     private int lastHour;
 
@@ -26,8 +26,8 @@ public class StatsPoster implements Runnable {
 
         server = s;
 
-        authorization = a;
         statsFetcher = sF;
+        authorization = a;
 
         lastHour = LocalTime.now().getHour();
     }
@@ -37,7 +37,6 @@ public class StatsPoster implements Runnable {
         int hourNow = LocalTime.now().getHour();
 
         if (hourNow != lastHour) {
-            System.out.printf("Posting stats (hour: %d - %d)%n", hourNow, lastHour);
             postStats();
             lastHour = hourNow;
         }

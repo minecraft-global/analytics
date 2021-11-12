@@ -12,7 +12,7 @@ public class StatsRecord {
     private final float ticksPerSecond;
     @SerializedName("world_size_bytes")
     private final long worldSizeBytes;
-    @SerializedName("chat_messages")
+    @SerializedName("chat_msgs_since")
     private final long chatMessages;
 
     public StatsRecord(float cP, long mU, float tP, long wS, long cM) {

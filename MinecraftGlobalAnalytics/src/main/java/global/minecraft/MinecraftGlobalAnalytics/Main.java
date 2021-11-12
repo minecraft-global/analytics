@@ -22,7 +22,7 @@ public final class Main extends JavaPlugin {
 
         if (authorization.get().equals(config.getDefaults().getString("serverToken"))) {
             authorization.setDefaulted(true);
-            server.getConsoleSender().sendMessage(ChatColor.YELLOW + "MinecraftGlobalAnalytics server token not set, please set token via /settoken <token>");
+            server.getConsoleSender().sendMessage(ChatColor.GOLD + "MinecraftGlobalAnalytics server token not set, please set token via /settoken <token>");
         }
 
         BukkitScheduler scheduler = server.getScheduler();

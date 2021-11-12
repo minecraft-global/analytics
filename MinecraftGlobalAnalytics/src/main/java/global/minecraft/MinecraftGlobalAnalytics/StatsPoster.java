@@ -35,7 +35,7 @@ public class StatsPoster implements Runnable {
     @Override
     public void run() {
         if (authorization.isDefault()) {
-            server.getConsoleSender().sendMessage(ChatColor.GOLD + "Skipping stats post due to missing server token. Set the token in config.yml or via /settoken <token>.");
+            server.getConsoleSender().sendMessage(ChatColor.GOLD + "[MinecraftGlobalAnalytics] Skipping stats post due to missing server token. Set the token in config.yml or via /settoken <token>.");
             return;
         }
 
@@ -69,9 +69,9 @@ public class StatsPoster implements Runnable {
             switch (statusCode) {
                 case 200: break;
                 case 401:
-                    consoleSender.sendMessage(ChatColor.RED + "Failed to post analytics to minecraft.global: Invalid server token specified in config.");
+                    consoleSender.sendMessage(ChatColor.RED + "[MinecraftGlobalAnalytics] Failed to post analytics to minecraft.global: Invalid server token specified in config.");
                 case 403:
-                    consoleSender.sendMessage(ChatColor.RED + "Failed to post analytics to minecraft.global: This server does not have premium.");
+                    consoleSender.sendMessage(ChatColor.RED + "[MinecraftGlobalAnalytics] Failed to post analytics to minecraft.global: This server does not have premium.");
                 default:
                     String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
                     throw new Exception(String.format("Response status code was not 200 OK (Was %d): %s", statusCode, responseBody));

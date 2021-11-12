@@ -23,6 +23,11 @@ public class SetTokenCommand implements CommandExecutor {
             return true;
         }
 
+        if (args.length == 0) {
+            sender.sendMessage(ChatColor.RED + "You must specify the server token.");
+            return true;
+        }
+
         if (args.length != 1) {
             sender.sendMessage(ChatColor.RED + "Invalid server token.");
             return true;

@@ -17,11 +17,11 @@ public class StatsPoster implements Runnable {
     private final Server server;
 
     private final StatsFetcher statsFetcher;
-    private final String authorization;
+    private final AuthHolder authorization;
 
     private int lastHour;
 
-    public StatsPoster(Server s, StatsFetcher sF, String a) {
+    public StatsPoster(Server s, StatsFetcher sF, AuthHolder a) {
         super();
 
         server = s;
@@ -34,6 +34,11 @@ public class StatsPoster implements Runnable {
 
     @Override
     public void run() {
+        if (authorization.isDefault()) {
+            server.getConsoleSender().sendMessage(ChatColor.YELLOW + "Skipping stats post due to missing server token. Set the token in config.yml or via /settoken <token>.");
+            return;
+        }
+
         int hourNow = LocalTime.now().getHour();
 
         if (hourNow != lastHour) {
@@ -46,7 +51,7 @@ public class StatsPoster implements Runnable {
         String data = statsFetcher.fetchStats().toJsonString();
         HttpPost request = new HttpPost("https://v2api.minecraft.global/serverstats");
 
-        request.addHeader("Authorization", authorization);
+        request.addHeader("Authorization", authorization.get());
         request.addHeader("Content-Type", "application/json");
 
         try {

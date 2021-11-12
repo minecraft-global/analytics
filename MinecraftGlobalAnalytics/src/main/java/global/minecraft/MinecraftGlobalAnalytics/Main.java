@@ -8,6 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public final class Main extends JavaPlugin {
+    private AuthHolder authorization;
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
@@ -16,12 +18,11 @@ public final class Main extends JavaPlugin {
         PluginManager pluginManager = server.getPluginManager();
 
         FileConfiguration config = getConfig();
-        String authorization = config.getString("serverToken");
+        authorization = new AuthHolder(config.getString("serverToken"));
 
-        if (authorization.equals(config.getDefaults().getString("serverToken"))) {
-            server.getConsoleSender().sendMessage(ChatColor.RED + "Please set the server token in plugins/MinecraftGlobalAnalytics/config.yml.");
-            pluginManager.disablePlugin(this);
-            return;
+        if (authorization.get().equals(config.getDefaults().getString("serverToken"))) {
+            authorization.setDefaulted(true);
+            server.getConsoleSender().sendMessage(ChatColor.YELLOW + "MinecraftGlobalAnalytics server token not set, please set token via /settoken <token>");
         }
 
         BukkitScheduler scheduler = server.getScheduler();
@@ -35,6 +36,9 @@ public final class Main extends JavaPlugin {
         // we wait two minutes before starting these tasks
         scheduler.scheduleSyncRepeatingTask(this, tpsMeasurer, 2*20*60, 1);
         scheduler.scheduleSyncRepeatingTask(this, statsPoster, 2*20*60, 100);
+
+        // register settoken command
+        getCommand("settoken").setExecutor(new SetTokenCommand(this, authorization));
     }
 
     @Override

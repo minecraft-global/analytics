@@ -3,3 +3,8 @@ version: 1.0
 main: global.minecraft.MinecraftGlobalAnalytics.Main
 authors: [ Iapetus11, trustedmercury ]
 description: The official plugin for statistics on https://minecraft.global
+commands:
+  settoken:
+    description: Sets the server token to the specified value
+    usage: /<command> <token>
+    permission: minecraftglobalanalytics.settoken

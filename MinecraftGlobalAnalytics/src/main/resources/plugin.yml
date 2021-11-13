@@ -1,5 +1,5 @@
 name: MinecraftGlobalAnalytics
-version: 1.0
+version: 2.0.1-beta
 main: global.minecraft.MinecraftGlobalAnalytics.Main
 authors: [ Iapetus11, trustedmercury ]
 description: The official plugin for statistics on https://minecraft.global

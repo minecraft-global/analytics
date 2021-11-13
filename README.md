@@ -1,5 +1,5 @@
 # minecraft-global-analytics
-*The Spigot plugin for server analytics on https://minecraft.global*
+*The Bukkit/Spigot/Paper plugin for server analytics on https://minecraft.global*
 
 ## Installation / Usage
 - Download the latest build from the [releases page](https://github.com/minecraft-global/minecraft-global-analytics/releases)

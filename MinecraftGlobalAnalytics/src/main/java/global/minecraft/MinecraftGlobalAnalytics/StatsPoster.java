@@ -34,16 +34,17 @@ public class StatsPoster implements Runnable {
 
     @Override
     public void run() {
-        if (authorization.isDefault()) {
-            server.getConsoleSender().sendMessage(ChatColor.GOLD + "[MinecraftGlobalAnalytics] Skipping stats post due to missing server token. Set the token in config.yml or via /settoken <token>.");
-            return;
-        }
-
         int hourNow = LocalTime.now().getHour();
 
         if (hourNow != lastHour) {
-            postStats();
             lastHour = hourNow;
+
+            if (authorization.isDefault()) {
+                server.getConsoleSender().sendMessage(ChatColor.GOLD + "[MinecraftGlobalAnalytics] Skipping stats post due to missing server token. Set the token in config.yml or via /settoken <token>.");
+                return;
+            }
+
+            postStats();
         }
     }
 

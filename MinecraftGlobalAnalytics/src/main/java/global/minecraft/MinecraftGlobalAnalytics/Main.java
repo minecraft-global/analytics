@@ -8,8 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public final class Main extends JavaPlugin {
-    private AuthHolder authorization;
-
     @Override
     public void onEnable() {
         saveDefaultConfig();
@@ -18,7 +16,7 @@ public final class Main extends JavaPlugin {
         PluginManager pluginManager = server.getPluginManager();
 
         FileConfiguration config = getConfig();
-        authorization = new AuthHolder(config.getString("serverToken"));
+        AuthHolder authorization = new AuthHolder(config.getString("serverToken"));
 
         if (authorization.get().equals(config.getDefaults().getString("serverToken"))) {
             authorization.setDefaulted(true);

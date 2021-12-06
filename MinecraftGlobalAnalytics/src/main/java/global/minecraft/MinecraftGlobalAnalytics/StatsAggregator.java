@@ -7,12 +7,12 @@ import org.bukkit.World;
 
 import java.lang.management.ManagementFactory;
 
-public class StatsFetcher {
+public class StatsAggregator {
     private final Server server;
     private final EventsListener eventsListener;
     private final TPSMeasurer tpsMeasurer;
 
-    public StatsFetcher(Server s, EventsListener eL, TPSMeasurer tP) {
+    public StatsAggregator(Server s, EventsListener eL, TPSMeasurer tP) {
         server = s;
         eventsListener = eL;
         tpsMeasurer = tP;

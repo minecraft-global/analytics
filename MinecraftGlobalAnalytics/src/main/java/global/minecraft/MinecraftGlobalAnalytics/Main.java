@@ -26,8 +26,8 @@ public final class Main extends JavaPlugin {
         BukkitScheduler scheduler = server.getScheduler();
         EventsListener eventsListener = new EventsListener();
         TPSMeasurer tpsMeasurer = new TPSMeasurer();
-        StatsFetcher statsFetcher = new StatsFetcher(server, eventsListener, tpsMeasurer);
-        StatsPoster statsPoster = new StatsPoster(server, statsFetcher, authorization);
+        StatsAggregator statsAggregator = new StatsAggregator(server, eventsListener, tpsMeasurer);
+        StatsPoster statsPoster = new StatsPoster(server, statsAggregator, authorization);
 
         pluginManager.registerEvents(eventsListener, this);
 

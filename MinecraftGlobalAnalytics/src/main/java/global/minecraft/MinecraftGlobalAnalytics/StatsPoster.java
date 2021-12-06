@@ -71,8 +71,10 @@ public class StatsPoster implements Runnable {
                 case 200: break;
                 case 401:
                     consoleSender.sendMessage(ChatColor.RED + "[MinecraftGlobalAnalytics] Failed to post analytics to minecraft.global: Invalid server token specified in config.");
+                    break;
                 case 403:
                     consoleSender.sendMessage(ChatColor.RED + "[MinecraftGlobalAnalytics] Failed to post analytics to minecraft.global: This server does not have premium.");
+                    break;
                 default:
                     String responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
                     throw new Exception(String.format("Response status code was not 200 OK (Was %d): %s", statusCode, responseBody));

@@ -18,10 +18,11 @@ public class StatsPoster implements Runnable {
 
     private final StatsAggregator statsAggregator;
     private final AuthHolder authorization;
+    private final int minuteOffset;
 
     private int lastHour;
 
-    public StatsPoster(Server s, StatsAggregator sF, AuthHolder a) {
+    public StatsPoster(Server s, StatsAggregator sF, AuthHolder a, int o) {
         super();
 
         server = s;
@@ -29,14 +30,18 @@ public class StatsPoster implements Runnable {
         statsAggregator = sF;
         authorization = a;
 
+        minuteOffset = o;
+
         lastHour = LocalTime.now().getHour();
     }
 
     @Override
     public void run() {
-        int hourNow = LocalTime.now().getHour();
+        LocalTime now = LocalTime.now();
+        int hourNow = now.getHour();
+        int minuteNow = now.getMinute();
 
-        if (hourNow != lastHour) {
+        if (hourNow != lastHour && minuteNow == minuteOffset) {
             lastHour = hourNow;
 
             if (authorization.isDefault()) {

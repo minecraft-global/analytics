@@ -7,6 +7,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.Random;
+
 public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
@@ -23,11 +25,16 @@ public final class Main extends JavaPlugin {
             server.getConsoleSender().sendMessage(ChatColor.GOLD + "[MinecraftGlobalAnalytics] server token not set, please set token via /settoken <token>");
         }
 
+        if (config.getInt("minuteOffset") < 1 || config.getInt("minuteOffset") > 59) {
+            config.set("minuteOffset", (new Random()).nextInt(60));
+            saveConfig();
+        }
+
         BukkitScheduler scheduler = server.getScheduler();
         EventsListener eventsListener = new EventsListener();
         TPSMeasurer tpsMeasurer = new TPSMeasurer();
         StatsAggregator statsAggregator = new StatsAggregator(server, eventsListener, tpsMeasurer);
-        StatsPoster statsPoster = new StatsPoster(server, statsAggregator, authorization);
+        StatsPoster statsPoster = new StatsPoster(server, statsAggregator, authorization, config.getInt("minuteOffset"));
 
         pluginManager.registerEvents(eventsListener, this);
 

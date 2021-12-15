@@ -50,7 +50,7 @@ public class StatsPoster implements Runnable {
 
     private void postStats() {
         String data = statsAggregator.fetchStats().toJsonString();
-        HttpPost request = new HttpPost("https://v2api.minecraft.global/serverstats");
+        HttpPost request = new HttpPost("https://api.minecraft.global/serverstats");
 
         request.addHeader("Authorization", authorization.get());
         request.addHeader("Content-Type", "application/json");
